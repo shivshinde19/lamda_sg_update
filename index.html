@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Home Access</h3>
+<input id="u" placeholder="Username"><br><br>
+<input id="p" type="password" placeholder="Password"><br><br>
+<button onclick="go()">Request Access</button>
+
+<script>
+async function go(){
+  const ip = await fetch("https://api.ipify.org?format=json")
+    .then(r=>r.json()).then(d=>d.ip);
+
+  fetch("https://at3ihqxr3xicsga7pp4nhe3l2q0rhcks.lambda-url.us-east-1.on.aws/",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      username: u.value,
+      password: p.value,
+      ip: ip
+    })
+  }).then(r=>r.text()).then(alert);
+}
+</script>
+</body>
+</html>
