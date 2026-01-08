@@ -1,26 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home Access Request</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+
+  h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  label {
+    font-size: 14px;
+    color: #555;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background: #0073e6;
+    border: none;
+    color: white;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #005bb5;
+  }
+</style>
+</head>
+
 <body>
-<h3>Home Access</h3>
-<input id="u" placeholder="Username"><br><br>
-<input id="p" type="password" placeholder="Password"><br><br>
-<button onclick="go()">Request Access</button>
+
+<div class="card">
+  <h3>Home Access Request</h3>
+
+  <label>Username</label>
+  <input id="u" placeholder="Enter username">
+
+  <label>Password</label>
+  <input id="p" type="password" placeholder="Enter password">
+
+  <label>Your Public IP</label>
+  <input id="ip" placeholder="e.g. 49.36.xxx.xxx">
+
+  <button onclick="go()">Request Access</button>
+</div>
 
 <script>
-async function go(){
-  const ip = await fetch("https://api.ipify.org?format=json")
-    .then(r=>r.json()).then(d=>d.ip);
-
+function go(){
   fetch("https://at3ihqxr3xicsga7pp4nhe3l2q0rhcks.lambda-url.us-east-1.on.aws/",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      username: u.value,
-      password: p.value,
-      ip: ip
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      username: document.getElementById("u").value,
+      password: document.getElementById("p").value,
+      ip: document.getElementById("ip").value
     })
-  }).then(r=>r.text()).then(alert);
+  })
+  .then(r => r.text())
+  .then(alert)
+  .catch(err => alert("Error: " + err));
 }
 </script>
+
 </body>
 </html>
